@@ -25,5 +25,13 @@ public class LivroController {
         return livroService.listarLivro();
     }
 
+    @PutMapping("/{isbn}")
+    public Livro atualizarLivro(@PathVariable String isbn, @RequestBody Livro livro) {
+        return livroService.atualizarLivro(isbn, livro);
+    }
 
+    @DeleteMapping("/{isbn}")
+    public Livro deletarLivro(@PathVariable String isbn) {
+        return livroService.deletarLivro(isbn);
+    }
 }

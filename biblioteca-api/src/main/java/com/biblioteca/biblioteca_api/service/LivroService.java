@@ -32,8 +32,17 @@ public class LivroService {
 
         livro.setTitulo(novoLivro.getTitulo());
         livro.setAutor(novoLivro.getAutor());
-        livro.setIsbn(novoLivro.getIsbn());
+
+        livroRepository.delete(novoLivro);
 
         return livroRepository.save(livro);
+    }
+
+    public Livro deletarLivro(String isbn) {
+        Livro livro = livroRepository.findByIsbn(isbn)
+                .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
+
+        livroRepository.delete(livro);
+        return livro;
     }
 }
