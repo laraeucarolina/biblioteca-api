@@ -14,53 +14,74 @@ import java.util.List;
 
 @Service
 public class EmprestimoService {
-    @Autowired
-    private EmprestimoRepository emprestimoRepository;
 
     @Autowired
-    private LivroRepository livroRepository;
+    LivroRepository livroRepository;
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    EmprestimoRepository emprestimoRepository;
 
-    public Emprestimo realizarEmprestimo(Long livroId, Usuario usuario) {
-        Livro livro = livroRepository.findById(livroId).orElseThrow();
+    @Autowired
+    UsuarioRepository usuarioRepository;
 
-        if (!livro.isDisponivel()) {
+    public Emprestimo realizarEmprestimo(String isbn, String cpf) {
+        Livro livro = livroRepository.findByIsbn(isbn)
+                .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
+
+        Usuario usuario = usuarioRepository.findByCpf(cpf)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        if (livro.getQuantidade() <= 0) {
             throw new RuntimeException("Livro indisponível");
         }
 
-        livro.setDisponivel(false);
+        Emprestimo emprestimo = new Emprestimo(livro, usuario);
 
-        Emprestimo emprestimo = new Emprestimo();
-        emprestimo.setLivro(livro);
-        emprestimo.setUsuario(usuario);
-        emprestimo.setDataDeEmprestimo(LocalDate.now());
+        livro.setQuantidade(livro.getQuantidade() - 1);
+
+        emprestimo.setAtivo(true);
 
         return emprestimoRepository.save(emprestimo);
     }
 
-    public Emprestimo devolverLivro(Long emprestimoId) {
-        Emprestimo emprestimo = emprestimoRepository.findById(emprestimoId)
-                .orElseThrow(() -> new RuntimeException("Empréstimo não encontrado!"));
+
+    public Emprestimo devolverLivro(String isbn, String cpf) {
+        Emprestimo emprestimo = emprestimoRepository.findByLivroIsbnAndUsuarioCpfAndAtivoTrue(isbn, cpf)
+                .orElseThrow(() -> new RuntimeException("Emprestimo ativo não encontrado"));
+
+        if (emprestimo.getDataDeDevolucao() != null) {
+            throw new RuntimeException("Livro já devolvido");
+        }
 
         Livro livro = emprestimo.getLivro();
 
-        livro.setDisponivel(true);
-
         emprestimo.setDataDeDevolucao(LocalDate.now());
 
-        livroRepository.save(livro);
+        livro.setQuantidade(livro.getQuantidade() + 1);
+
+        emprestimo.setAtivo(false);
 
         return emprestimoRepository.save(emprestimo);
-
     }
 
-    public List<Emprestimo> listarEmprestimo() {
+
+    public List<Emprestimo> listarEmprestimos() {
         return emprestimoRepository.findAll();
     }
 
-    public Emprestimo buscarPorId(Long id) {
-        return emprestimoRepository.findById(id).orElseThrow(() -> new RuntimeException("Empréstimo não encontrado"));
+
+    public Emprestimo buscaPorId(Long id) {
+        return emprestimoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Emprestimo não encontrado"));
+    }
+
+
+    public List<Emprestimo> listarEmprestimosAtivos() {
+        return emprestimoRepository.findByAtivoTrue();
+    }
+
+
+    public List<Emprestimo> listarPorUsuario(String cpf) {
+        return emprestimoRepository.findByUsuario();
     }
 }

@@ -15,16 +15,18 @@ public class Livro {
     private String isbn;
     private String autor;
     private boolean disponivel;
+    private int quantidade;
 
     public Livro() {
         super();
     }
 
-    public Livro(String titulo, String isbn, String autor) {
+    public Livro(String titulo, String isbn, String autor, int quantidade) {
         this.titulo = titulo;
         this.isbn = isbn;
         this.autor = autor;
         this.disponivel = true;
+        this.quantidade = quantidade;
     }
 
     public void setDisponivel(boolean disponivel) {
@@ -65,5 +67,13 @@ public class Livro {
 
     public void setIsbn(String isbn) {
         this.isbn = isbn;
+    }
+
+    public int getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
     }
 }

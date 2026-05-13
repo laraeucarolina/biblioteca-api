@@ -32,6 +32,7 @@ public class LivroService {
 
         livro.setTitulo(novoLivro.getTitulo());
         livro.setAutor(novoLivro.getAutor());
+        livro.setQuantidade(novoLivro.getQuantidade());
 
         livroRepository.delete(novoLivro);
 
