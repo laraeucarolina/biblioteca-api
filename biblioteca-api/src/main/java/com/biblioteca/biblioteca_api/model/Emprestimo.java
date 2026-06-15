@@ -3,37 +3,61 @@ package com.biblioteca.biblioteca_api.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
 @Entity
 public class Emprestimo {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    private Livro livro;
+    @JoinColumn(name = "obra_id")
+    private Obra obra;
 
     @ManyToOne
+    @JoinColumn(name = "exemplar_id")
+    private Exemplar exemplar;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    private LocalDate dataDeEmprestimo;
-    private LocalDate dataDeDevolucao;
-    private boolean ativo;
+    @ManyToOne
+    @JoinColumn(name = "funcionario_id")
+    private Funcionario funcionario;
 
-    public Emprestimo(Livro livro, Usuario usuario) {
-        this.livro = livro;
-        this.usuario = usuario;
-        this.dataDeEmprestimo = LocalDate.now();
+    private LocalDate data_emprestimo;
+
+    private LocalDate data_prevista_devolucao;
+
+    public Emprestimo() {
+        super();
     }
 
-    public Livro getLivro() {
-        return livro;
+    public Long getId() {
+        return id;
     }
 
-    public void setLivro(Livro livro) {
-        this.livro = livro;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Obra getObra() {
+        return obra;
+    }
+
+    public void setObra(Obra obra) {
+        this.obra = obra;
+    }
+
+    public Exemplar getExemplar() {
+        return exemplar;
+    }
+
+    public void setExemplar(Exemplar exemplar) {
+        this.exemplar = exemplar;
     }
 
     public Usuario getUsuario() {
@@ -44,27 +68,27 @@ public class Emprestimo {
         this.usuario = usuario;
     }
 
-    public LocalDate getDataDeEmprestimo() {
-        return dataDeEmprestimo;
+    public Funcionario getFuncionario() {
+        return funcionario;
     }
 
-    public void setDataDeEmprestimo(LocalDate dataDeEmprestimo) {
-        this.dataDeEmprestimo = dataDeEmprestimo;
+    public void setFuncionario(Funcionario funcionario) {
+        this.funcionario = funcionario;
     }
 
-    public LocalDate getDataDeDevolucao() {
-        return dataDeDevolucao;
+    public LocalDate getData_emprestimo() {
+        return data_emprestimo;
     }
 
-    public void setDataDeDevolucao(LocalDate dataDeDevolucao) {
-        this.dataDeDevolucao = dataDeDevolucao;
+    public void setData_emprestimo(LocalDate data_emprestimo) {
+        this.data_emprestimo = data_emprestimo;
     }
 
-    public boolean isAtivo() {
-        return ativo;
+    public LocalDate getData_prevista_devolucao() {
+        return data_prevista_devolucao;
     }
 
-    public void setAtivo(boolean ativo) {
-        this.ativo = ativo;
+    public void setData_prevista_devolucao(LocalDate data_prevista_devolucao) {
+        this.data_prevista_devolucao = data_prevista_devolucao;
     }
 }

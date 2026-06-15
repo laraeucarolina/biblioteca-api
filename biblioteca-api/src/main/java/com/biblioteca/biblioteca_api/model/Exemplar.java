@@ -1,4 +1,4 @@
 package com.biblioteca.biblioteca_api.model;
 
-public class Usuario {
+public class Exemplar {
 }
