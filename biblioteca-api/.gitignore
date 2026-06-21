@@ -33,3 +33,6 @@ build/
 .vscode/
 gcm-diagnose.log
 *.log
+
+#apllication.properties
+src/main/resources/application.properties
