@@ -15,11 +15,11 @@ public class UsuarioService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public Usuario salvar(Usuario usuario) {
+    public Usuario cadastrarUsuario(Usuario usuario) {
         return this.usuarioRepository.save(usuario);
     }
 
-    public List<Usuario> listarTodos() {
+    public List<Usuario> listarTodosUsuarios() {
         return this.usuarioRepository.findAll();
     }
 
@@ -28,7 +28,7 @@ public class UsuarioService {
             .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
     }
 
-    public void deletar(Long id) {
+    public void deletarUsuario(Long id) {
         usuarioRepository.deleteById(id);
     }
 }
